@@ -27,10 +27,9 @@ print(title.text)
 
 companies = soup.findAll("span", attrs={"class": "tv-screener__description"})
 
-print(companies)
-
 for c in companies[:5]:
     print(c.text.strip())
+
 
 # SOME USEFUL FUNCTIONS IN BEAUTIFULSOUP
 # -----------------------------------------------#
@@ -42,3 +41,28 @@ for c in companies[:5]:
 # Text: nameList = Objfind(text="the prince")
 # Limit = find with limit of 1
 # keyword: allText = Obj.find(id="title",class="text")
+
+stock_table = soup.findAll("tbody")
+
+stock_table = stock_table[0]
+
+rows = stock_table.findAll("tr")
+
+for r in rows[:5]:
+    c = r.findAll("td")
+    name = (
+        c[0]
+        .findAll("span", attrs={"class": "tv-screener__description"})[0]
+        .text.strip()
+    )
+    price = float(c[1].text)
+    pct_change = float(c[2].text.strip("%"))
+    chg = float(c[3].text)
+
+    s_price = round(price / (1 + (pct_change / 100)), 2)
+
+    print(f"Company Name: {name}")
+    print(f"Current Price: {price}")
+    print(f"Change Percent: {pct_change}%")
+    print(f"Total Change: {chg}")
+    print(f"Starting Price: {s_price}")
